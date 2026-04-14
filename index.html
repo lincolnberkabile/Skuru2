@@ -67,6 +67,13 @@
   .flag-ok { width: 6px; height: 6px; border-radius: 50%; background: #639922; display: inline-block; margin-right: 4px; }
   .flag-warn { width: 6px; height: 6px; border-radius: 50%; background: #EF9F27; display: inline-block; margin-right: 4px; }
   .flag-err { width: 6px; height: 6px; border-radius: 50%; background: #E24B4A; display: inline-block; margin-right: 4px; }
+  .flag-restock { width: 6px; height: 6px; border-radius: 50%; background: #378ADD; display: inline-block; margin-right: 4px; }
+  .restock-banner { display: flex; align-items: flex-start; gap: 10px; background: #E6F1FB; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; border: 0.5px solid rgba(55,138,221,0.25); }
+  .restock-banner-dot { width: 8px; height: 8px; border-radius: 50%; background: #378ADD; flex-shrink: 0; margin-top: 3px; }
+  .restock-banner-title { font-size: 12px; color: #185FA5; font-weight: 500; }
+  .restock-banner-sub { font-size: 11px; color: #185FA5; margin-top: 2px; opacity: 0.85; }
+  .btn-restock { padding: 4px 10px; font-size: 11px; border-radius: 6px; cursor: pointer; border: 0.5px solid #185FA5; background: #378ADD; color: #fff; font-family: inherit; font-weight: 500; margin-top: 6px; margin-right: 4px; }
+  .btn-restock-outline { padding: 4px 10px; font-size: 11px; border-radius: 6px; cursor: pointer; border: 0.5px solid #185FA5; background: #fff; color: #185FA5; font-family: inherit; font-weight: 500; margin-top: 6px; }
   .import-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 0.5px solid rgba(0,0,0,0.08); }
   .upload-zone { border: 1px dashed rgba(0,0,0,0.2); border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; }
   .upload-zone:hover { background: #f5f5f3; }
@@ -298,13 +305,25 @@
 
         <!-- TITLEIST — flagged / duplicate SKU -->
         <div class="review-sub active" id="review-titleist">
-          <div style="font-size:11px;color:#888;margin-bottom:12px;">Titleist Spring order · 42 items · <span style="color:#A32D2D;font-weight:500;">1 duplicate SKU conflict detected</span></div>
+          <div style="font-size:11px;color:#888;margin-bottom:12px;">Titleist Spring order · 42 items · <span style="color:#A32D2D;font-weight:500;">1 conflict</span> · <span style="color:#185FA5;font-weight:500;">1 restock detected</span></div>
 
           <div class="flag-banner">
             <div class="flag-banner-dot"></div>
             <div>
-              <div class="flag-banner-title">Duplicate SKU conflict — TIT-BALL-WHT already exists in Square</div>
-              <div class="flag-banner-sub">This SKU was previously imported and is already tracked in your POS. Rename it or it will overwrite your existing item. All other SKUs are clear.</div>
+              <div class="flag-banner-title">Duplicate SKU conflict — TIT-SOFT-WHT already exists in Square</div>
+              <div class="flag-banner-sub">This SKU matches a different product already in your POS. Rename it before importing or it will overwrite your existing item.</div>
+            </div>
+          </div>
+
+          <div class="restock-banner">
+            <div class="restock-banner-dot"></div>
+            <div style="flex:1;">
+              <div class="restock-banner-title">Restock detected — TIT-BALL-WHT already exists in Square</div>
+              <div class="restock-banner-sub">Pro V1 White balls are already in your inventory with 12 units in stock. This import will add 48 dz. Choose how to handle it below.</div>
+              <div>
+                <button class="btn-restock">Update quantity in Square →</button>
+                <button class="btn-restock-outline">Create as new item</button>
+              </div>
             </div>
           </div>
 
@@ -322,7 +341,8 @@
                 Item: Tour Soft Golf Balls<br>
                 Colors: White<br>
                 Qty: 24 dz · $34.99/dz<br><br>
-                <span style="color:#E24B4A;">⚠ Pro V1 White — SKU conflict with existing Square item</span>
+                <span style="color:#378ADD;">↻ Pro V1 White — restock detected, 12 units currently in stock</span><br>
+                <span style="color:#E24B4A;">⚠ Tour Soft White — SKU conflict with different existing item</span>
               </div>
             </div>
             <div>
@@ -331,26 +351,35 @@
                 <table class="sku-table">
                   <thead><tr><th></th><th>Product</th><th>SKU</th><th>Color</th><th>Qty</th></tr></thead>
                   <tbody>
-                    <tr style="background:rgba(226,75,74,0.05);">
-                      <td><span class="flag-err"></span></td>
+                    <tr style="background:rgba(55,138,221,0.05);">
+                      <td><span class="flag-restock"></span></td>
                       <td style="font-size:11px;">Pro V1 Balls</td>
-                      <td><input class="sku-input" value="TIT-BALL-WHT" style="color:#A32D2D;border-color:rgba(226,75,74,0.3);background:rgba(226,75,74,0.04);"/></td>
-                      <td style="font-size:11px;color:#A32D2D;">Duplicate</td>
+                      <td><input class="sku-input" value="TIT-BALL-WHT" style="color:#185FA5;border-color:rgba(55,138,221,0.3);background:rgba(55,138,221,0.04);"/></td>
+                      <td style="font-size:11px;color:#185FA5;">Restock</td>
                       <td><input class="sku-input" value="48 dz" style="width:52px;"/></td>
                     </tr>
                     <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Pro V1 Balls</td><td><input class="sku-input" value="TIT-BALL-YLW"/></td><td style="font-size:11px;">Yellow</td><td><input class="sku-input" value="48 dz" style="width:52px;"/></td></tr>
                     <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Players 4 Bag</td><td><input class="sku-input" value="TIT-BAG-BLK"/></td><td style="font-size:11px;">Black/White</td><td><input class="sku-input" value="6" style="width:52px;"/></td></tr>
                     <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Players 4 Bag</td><td><input class="sku-input" value="TIT-BAG-NVY"/></td><td style="font-size:11px;">Navy/White</td><td><input class="sku-input" value="6" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Tour Soft Balls</td><td><input class="sku-input" value="TIT-SOFT-WHT"/></td><td style="font-size:11px;">White</td><td><input class="sku-input" value="24 dz" style="width:52px;"/></td></tr>
+                    <tr style="background:rgba(226,75,74,0.05);">
+                      <td><span class="flag-err"></span></td>
+                      <td style="font-size:11px;">Tour Soft Balls</td>
+                      <td><input class="sku-input" value="TIT-SOFT-WHT" style="color:#A32D2D;border-color:rgba(226,75,74,0.3);background:rgba(226,75,74,0.04);"/></td>
+                      <td style="font-size:11px;color:#A32D2D;">Conflict</td>
+                      <td><input class="sku-input" value="24 dz" style="width:52px;"/></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
-              <div style="font-size:11px;color:#A32D2D;margin-top:8px;padding:0 4px;">Rename the duplicate SKU above before importing — click the field to edit it.</div>
+              <div style="font-size:11px;margin-top:8px;padding:0 4px;">
+                <span style="color:#185FA5;">● Restock</span> — quantity will update in Square &nbsp;·&nbsp;
+                <span style="color:#A32D2D;">● Conflict</span> — rename before importing
+              </div>
             </div>
           </div>
 
           <div class="import-bar">
-            <div style="font-size:12px;color:#888;">42 SKUs ready · 1 conflict · resolve before importing</div>
+            <div style="font-size:12px;color:#888;">42 SKUs · 1 restock · 1 conflict · resolve conflict before importing</div>
             <div style="display:flex;gap:8px;">
               <button class="btn">Save draft</button>
               <button class="btn btn-primary" style="opacity:0.5;cursor:not-allowed;" disabled>Import all to Square →</button>
