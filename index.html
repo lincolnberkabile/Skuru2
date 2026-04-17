@@ -68,6 +68,8 @@
   .flag-warn { width: 6px; height: 6px; border-radius: 50%; background: #EF9F27; display: inline-block; margin-right: 4px; }
   .flag-err { width: 6px; height: 6px; border-radius: 50%; background: #E24B4A; display: inline-block; margin-right: 4px; }
   .flag-restock { width: 6px; height: 6px; border-radius: 50%; background: #378ADD; display: inline-block; margin-right: 4px; }
+  .price-suggested { font-size: 10px; color: #185FA5; font-weight: 500; display: block; margin-top: 1px; }
+  .price-missing { font-size: 10px; color: #EF9F27; font-weight: 500; display: block; margin-top: 1px; }
   .restock-banner { display: flex; align-items: flex-start; gap: 10px; background: #E6F1FB; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; border: 0.5px solid rgba(55,138,221,0.25); }
   .restock-banner-dot { width: 8px; height: 8px; border-radius: 50%; background: #378ADD; flex-shrink: 0; margin-top: 3px; }
   .restock-banner-title { font-size: 12px; color: #185FA5; font-weight: 500; }
@@ -252,20 +254,26 @@
             <div style="flex:1;">
               <div style="font-size:11px;color:#888;margin-bottom:4px;">SKU formula</div>
               <select class="sel" id="formula-select" onchange="handleFormulaChange(this.value)">
-                <option value="preset1">BRAND-CATEGORY-COLOR-SIZE</option>
-                <option value="preset2">BRAND-COLOR-SIZE</option>
-                <option value="preset3">CATEGORY-SKU#</option>
-                <option value="custom">Custom formula...</option>
+                <option value="full" selected>VENDOR · CATEGORY · PRODUCT · VARIANT · SKU# &nbsp;★ Recommended</option>
+                <option value="preset1">VENDOR · CATEGORY · SKU#</option>
+                <option value="preset2">VENDOR · PRODUCT · VARIANT · SKU#</option>
+                <option value="preset3">CATEGORY · PRODUCT · SKU#</option>
+                <option value="preset4">VENDOR · COLOR · SIZE · SKU#</option>
+                <option value="custom">Custom formula — build your own…</option>
               </select>
+              <div style="font-size:11px;color:#185FA5;margin-top:5px;padding:0 2px;">
+                ★ Recommended formula matches your current SKU structure
+              </div>
               <div class="custom-builder" id="custom-builder">
                 <div class="builder-label">Select blocks for your formula — click to add in order</div>
                 <div class="block-row">
-                  <span class="block-chip" onclick="toggleBlock(this,'BRAND')">Brand</span>
-                  <span class="block-chip" onclick="toggleBlock(this,'CAT')">Category</span>
+                  <span class="block-chip" onclick="toggleBlock(this,'VENDOR')">Vendor</span>
+                  <span class="block-chip" onclick="toggleBlock(this,'CATEGORY')">Category</span>
+                  <span class="block-chip" onclick="toggleBlock(this,'PRODUCT')">Product</span>
+                  <span class="block-chip" onclick="toggleBlock(this,'VARIANT')">Variant</span>
                   <span class="block-chip" onclick="toggleBlock(this,'COLOR')">Color</span>
                   <span class="block-chip" onclick="toggleBlock(this,'SIZE')">Size</span>
                   <span class="block-chip" onclick="toggleBlock(this,'SKU#')">SKU #</span>
-                  <span class="block-chip" onclick="toggleBlock(this,'VENDOR')">Vendor</span>
                   <span class="block-chip" onclick="toggleBlock(this,'YEAR')">Year</span>
                   <span class="block-chip" onclick="toggleBlock(this,'SEASON')">Season</span>
                 </div>
@@ -347,33 +355,58 @@
             </div>
             <div>
               <div class="section-title">Generated SKUs — click any field to edit</div>
+              <div style="font-size:11px;color:#888;margin-bottom:8px;">Formula: VENDOR · CATEGORY · PRODUCT · VARIANT · SEQ# &nbsp;·&nbsp; Sequence per category from last Titleist import</div>
               <div class="card" style="padding:0;overflow:hidden;">
                 <table class="sku-table">
-                  <thead><tr><th></th><th>Product</th><th>SKU</th><th>Color</th><th>Qty</th></tr></thead>
+                  <thead><tr><th></th><th>Product</th><th>SKU</th><th>Color</th><th>Qty</th><th>Retail Price</th></tr></thead>
                   <tbody>
                     <tr style="background:rgba(55,138,221,0.05);">
                       <td><span class="flag-restock"></span></td>
                       <td style="font-size:11px;">Pro V1 Balls</td>
-                      <td><input class="sku-input" value="TIT-BALL-WHT" style="color:#185FA5;border-color:rgba(55,138,221,0.3);background:rgba(55,138,221,0.04);"/></td>
+                      <td><input class="sku-input" value="TIT-BALL-PROV1-WHT-014" style="color:#185FA5;border-color:rgba(55,138,221,0.3);background:rgba(55,138,221,0.04);"/></td>
                       <td style="font-size:11px;color:#185FA5;">Restock</td>
                       <td><input class="sku-input" value="48 dz" style="width:52px;"/></td>
+                      <td><input class="sku-input" value="$54.99" style="width:68px;color:#1a1a1a;"/><span class="price-suggested">From history</span></td>
                     </tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Pro V1 Balls</td><td><input class="sku-input" value="TIT-BALL-YLW"/></td><td style="font-size:11px;">Yellow</td><td><input class="sku-input" value="48 dz" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Players 4 Bag</td><td><input class="sku-input" value="TIT-BAG-BLK"/></td><td style="font-size:11px;">Black/White</td><td><input class="sku-input" value="6" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Players 4 Bag</td><td><input class="sku-input" value="TIT-BAG-NVY"/></td><td style="font-size:11px;">Navy/White</td><td><input class="sku-input" value="6" style="width:52px;"/></td></tr>
+                    <tr>
+                      <td><span class="flag-ok"></span></td>
+                      <td style="font-size:11px;">Pro V1 Balls</td>
+                      <td><input class="sku-input" value="TIT-BALL-PROV1-YLW-015"/></td>
+                      <td style="font-size:11px;">Yellow</td>
+                      <td><input class="sku-input" value="48 dz" style="width:52px;"/></td>
+                      <td><input class="sku-input" value="$54.99" style="width:68px;"/><span class="price-suggested">From history</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="flag-ok"></span></td>
+                      <td style="font-size:11px;">Players 4 Bag</td>
+                      <td><input class="sku-input" value="TIT-BAG-PLY4-BLK-008"/></td>
+                      <td style="font-size:11px;">Black/White</td>
+                      <td><input class="sku-input" value="6" style="width:52px;"/></td>
+                      <td><input class="sku-input" value="$219.99" style="width:68px;"/><span class="price-suggested">45% markup</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="flag-ok"></span></td>
+                      <td style="font-size:11px;">Players 4 Bag</td>
+                      <td><input class="sku-input" value="TIT-BAG-PLY4-NVY-009"/></td>
+                      <td style="font-size:11px;">Navy/White</td>
+                      <td><input class="sku-input" value="6" style="width:52px;"/></td>
+                      <td><input class="sku-input" value="$219.99" style="width:68px;"/><span class="price-suggested">45% markup</span></td>
+                    </tr>
                     <tr style="background:rgba(226,75,74,0.05);">
                       <td><span class="flag-err"></span></td>
                       <td style="font-size:11px;">Tour Soft Balls</td>
-                      <td><input class="sku-input" value="TIT-SOFT-WHT" style="color:#A32D2D;border-color:rgba(226,75,74,0.3);background:rgba(226,75,74,0.04);"/></td>
+                      <td><input class="sku-input" value="TIT-BALL-TRSFT-WHT-016" style="color:#A32D2D;border-color:rgba(226,75,74,0.3);background:rgba(226,75,74,0.04);"/></td>
                       <td style="font-size:11px;color:#A32D2D;">Conflict</td>
                       <td><input class="sku-input" value="24 dz" style="width:52px;"/></td>
+                      <td><input class="sku-input" value="$44.99" style="width:68px;"/><span class="price-suggested">45% markup</span></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div style="font-size:11px;margin-top:8px;padding:0 4px;">
-                <span style="color:#185FA5;">● Restock</span> — quantity will update in Square &nbsp;·&nbsp;
-                <span style="color:#A32D2D;">● Conflict</span> — rename before importing
+                <span style="color:#185FA5;">● Restock</span> — updates quantity &nbsp;·&nbsp;
+                <span style="color:#A32D2D;">● Conflict</span> — rename before importing &nbsp;·&nbsp;
+                <span style="color:#888;">Prices editable — blue = suggested</span>
               </div>
             </div>
           </div>
@@ -422,23 +455,27 @@
             </div>
             <div>
               <div class="section-title">Generated SKUs — click any field to edit</div>
+              <div style="font-size:11px;color:#888;margin-bottom:8px;">Formula: VENDOR · CATEGORY · PRODUCT · VARIANT · SEQ# &nbsp;·&nbsp; Sequence per category from last Callaway import</div>
               <div class="card" style="padding:0;overflow:hidden;">
                 <table class="sku-table">
-                  <thead><tr><th></th><th>Product</th><th>SKU</th><th>Variant</th><th>Qty</th></tr></thead>
+                  <thead><tr><th></th><th>Product</th><th>SKU</th><th>Variant</th><th>Qty</th><th>Retail Price</th></tr></thead>
                   <tbody>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Rogue ST Driver</td><td><input class="sku-input" value="CAL-DRV-REG"/></td><td style="font-size:11px;">Regular</td><td><input class="sku-input" value="2" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Rogue ST Driver</td><td><input class="sku-input" value="CAL-DRV-STF"/></td><td style="font-size:11px;">Stiff</td><td><input class="sku-input" value="2" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Rogue ST Driver</td><td><input class="sku-input" value="CAL-DRV-XST"/></td><td style="font-size:11px;">X-Stiff</td><td><input class="sku-input" value="2" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Apex Pro Irons</td><td><input class="sku-input" value="CAL-IRN-STL"/></td><td style="font-size:11px;">Steel</td><td><input class="sku-input" value="4" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Apex Pro Irons</td><td><input class="sku-input" value="CAL-IRN-GFT"/></td><td style="font-size:11px;">Graphite</td><td><input class="sku-input" value="4" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Chrome Soft Balls</td><td><input class="sku-input" value="CAL-BALL-WHT"/></td><td style="font-size:11px;">White</td><td><input class="sku-input" value="36 dz" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Chrome Soft Balls</td><td><input class="sku-input" value="CAL-BALL-YLW"/></td><td style="font-size:11px;">Yellow</td><td><input class="sku-input" value="36 dz" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Chrome Soft Balls</td><td><input class="sku-input" value="CAL-BALL-TT"/></td><td style="font-size:11px;">Triple Track</td><td><input class="sku-input" value="36 dz" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Org 14 Cart Bag</td><td><input class="sku-input" value="CAL-BAG-BLK"/></td><td style="font-size:11px;">Black</td><td><input class="sku-input" value="3" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Org 14 Cart Bag</td><td><input class="sku-input" value="CAL-BAG-NVY"/></td><td style="font-size:11px;">Navy</td><td><input class="sku-input" value="3" style="width:52px;"/></td></tr>
-                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Org 14 Cart Bag</td><td><input class="sku-input" value="CAL-BAG-WHC"/></td><td style="font-size:11px;">White/Charcoal</td><td><input class="sku-input" value="3" style="width:52px;"/></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Rogue ST Driver</td><td><input class="sku-input" value="CAL-DRV-ROGUE-REG-008"/></td><td style="font-size:11px;">Regular</td><td><input class="sku-input" value="2" style="width:52px;"/></td><td><input class="sku-input" value="$699.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Rogue ST Driver</td><td><input class="sku-input" value="CAL-DRV-ROGUE-STF-009"/></td><td style="font-size:11px;">Stiff</td><td><input class="sku-input" value="2" style="width:52px;"/></td><td><input class="sku-input" value="$699.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Rogue ST Driver</td><td><input class="sku-input" value="CAL-DRV-ROGUE-XST-010"/></td><td style="font-size:11px;">X-Stiff</td><td><input class="sku-input" value="2" style="width:52px;"/></td><td><input class="sku-input" value="$699.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Apex Pro Irons</td><td><input class="sku-input" value="CAL-IRN-APEX-STL-006"/></td><td style="font-size:11px;">Steel</td><td><input class="sku-input" value="4" style="width:52px;"/></td><td><input class="sku-input" value="$1,679.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Apex Pro Irons</td><td><input class="sku-input" value="CAL-IRN-APEX-GFT-007"/></td><td style="font-size:11px;">Graphite</td><td><input class="sku-input" value="4" style="width:52px;"/></td><td><input class="sku-input" value="$1,679.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Chrome Soft Balls</td><td><input class="sku-input" value="CAL-BALL-CHRSFT-WHT-012"/></td><td style="font-size:11px;">White</td><td><input class="sku-input" value="36 dz" style="width:52px;"/></td><td><input class="sku-input" value="$62.99" style="width:68px;"/><span class="price-suggested">From history</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Chrome Soft Balls</td><td><input class="sku-input" value="CAL-BALL-CHRSFT-YLW-013"/></td><td style="font-size:11px;">Yellow</td><td><input class="sku-input" value="36 dz" style="width:52px;"/></td><td><input class="sku-input" value="$62.99" style="width:68px;"/><span class="price-suggested">From history</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Chrome Soft Balls</td><td><input class="sku-input" value="CAL-BALL-CHRSFT-TT-014"/></td><td style="font-size:11px;">Triple Track</td><td><input class="sku-input" value="36 dz" style="width:52px;"/></td><td><input class="sku-input" value="$62.99" style="width:68px;"/><span class="price-suggested">From history</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Org 14 Cart Bag</td><td><input class="sku-input" value="CAL-BAG-ORG14-BLK-005"/></td><td style="font-size:11px;">Black</td><td><input class="sku-input" value="3" style="width:52px;"/></td><td><input class="sku-input" value="$349.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Org 14 Cart Bag</td><td><input class="sku-input" value="CAL-BAG-ORG14-NVY-006"/></td><td style="font-size:11px;">Navy</td><td><input class="sku-input" value="3" style="width:52px;"/></td><td><input class="sku-input" value="$349.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
+                    <tr><td><span class="flag-ok"></span></td><td style="font-size:11px;">Org 14 Cart Bag</td><td><input class="sku-input" value="CAL-BAG-ORG14-WHC-007"/></td><td style="font-size:11px;">White/Charcoal</td><td><input class="sku-input" value="3" style="width:52px;"/></td><td><input class="sku-input" value="$349.99" style="width:68px;"/><span class="price-suggested">40% markup</span></td></tr>
                   </tbody>
                 </table>
+              </div>
+              <div style="font-size:11px;margin-top:8px;padding:0 4px;color:#888;">
+                All prices editable — blue label shows source · "From history" = matched previous import · "X% markup" = calculated from wholesale cost
               </div>
             </div>
           </div>
